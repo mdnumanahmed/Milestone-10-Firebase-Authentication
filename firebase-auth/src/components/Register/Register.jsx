@@ -21,6 +21,19 @@ const Register = () => {
         const email = event.target.email.value 
         const password = event.target.password.value 
         console.log(email, password);
+        setError('')
+        // validate password
+        if(!/(?=.*[A-Z])/.test(password)){
+            setError('Password should be at least One Upper Case')
+            return;
+        }
+        else if(!/(?=.*[0-9].*[0-9])/.test(password)){
+            setError('Password should be at least Two Numbers')
+            return;
+        }
+        else if(!password.length >= 6){
+            setError('Password should be at least 6 characters')
+        }
         // 3. create new user in the firebase
         createUserWithEmailAndPassword(auth, email, password)
         .then(result => {
@@ -42,9 +55,9 @@ const Register = () => {
         <div className='w-50 mx-auto'>
             <h4>Register</h4>
             <form onSubmit={handleSubmit}>
-                <input className='w-50 rounded ps-3' onChange={handleEmailChange} type="email" name="email" id="email" placeholder='Your Email' />
+                <input className='w-50 rounded ps-3' onChange={handleEmailChange} type="email" name="email" id="email" placeholder='Your Email' required />
                 <br /> <br />
-                <input className='w-50 rounded ps-3' onBlur={handlePassBlur} type="password" name="password" id="password" placeholder='Your Password' />
+                <input className='w-50 rounded ps-3' onBlur={handlePassBlur} type="password" name="password" id="password" placeholder='Your Password' required/>
                 <br /> <br />
                 <input type="submit" value="Register" />
             </form>
