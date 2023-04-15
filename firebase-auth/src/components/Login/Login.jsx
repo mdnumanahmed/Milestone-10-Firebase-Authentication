@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { GithubAuthProvider, GoogleAuthProvider, getAuth, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { GithubAuthProvider, GoogleAuthProvider, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import app from '../../firebase/firebase.config';
 import { toast } from 'react-toastify';
 
@@ -8,6 +8,9 @@ const auth = getAuth(app)
 const Login = () => {
     const [error, setError] = useState('')
     const [notice, setNotice] =  useState('')
+    const [show, setShow] = useState(false)
+
+    const emailRef = useRef()
     
     const googleProvider = new GoogleAuthProvider()
     const githubProvider = new GithubAuthProvider()
@@ -63,17 +66,38 @@ const Login = () => {
             setError(error.message)
             
         })
-
     }
+
+    const handleResetPassword = (event) => {
+        const email = emailRef.current.value
+        if(!email){
+            toast('Please write your email to reset password')
+            return;
+        }
+        sendPasswordResetEmail(auth, email)
+        .then(()=>{
+            toast('Please check your given email')
+        })
+        .catch(error => {
+            setError(error.message)
+        })
+    }
+
+    const handleShow = (event) => {
+        setShow(!show)
+    }
+
     return (
         <div className='w-50 mx-auto'>
         <p className='text-info'>{notice}</p>
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
-                <input className='w-50 rounded ps-3' type="email" name="email" id="email" placeholder='Your Email' required />
+                <input className='w-50 rounded ps-3' type="email" name="email" ref={emailRef} id="email" placeholder='Your Email' required />
                 <br /> <br />
-                <input className='w-50 rounded ps-3' type="password" name="password" id="password" placeholder='Your Password' required/>
-                <br /> <br />
+                <div className='position-relative'>
+                <input className='w-50 rounded ps-3' type={show ? 'text' : 'password'} name="password" id="password" placeholder='Your Password' required/> <label className='position-absolute right' htmlFor='password' onClick={handleShow} >Show</label>
+                </div>
+                <br /> <br /> 
                 <input type="submit" value="Login" />
             </form>
             <div>========== <span>Or</span> ============</div>
@@ -82,6 +106,7 @@ const Login = () => {
                 <button onClick={handleGithubSignIn} className='mb-3'>Sign in with Github</button>
                 <button className='mb-3'>Sign in with Tweeter</button>
             </div>
+            <p>Are you forgot password? <button onClick={handleResetPassword}>Reset Password</button></p>
             <p>Are you first time here ? <Link to='/register'>Please Register</Link></p>
             <p className='text-danger'>{error}</p>
         </div>
