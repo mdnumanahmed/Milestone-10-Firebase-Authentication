@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {createUserWithEmailAndPassword, getAuth} from 'firebase/auth'
+import {createUserWithEmailAndPassword, getAuth, sendEmailVerification} from 'firebase/auth'
 import app from '../../firebase/firebase.config';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -8,6 +8,7 @@ const auth = getAuth(app)
 
 const Register = () => {
     const [error, setError] = useState('')
+    const [notice, setNotice] =  useState('')
 
     const handleEmailChange = (event) => {
         console.log(event.target.value);
@@ -42,18 +43,27 @@ const Register = () => {
             console.log(createdUser);
             // clear the form data after creating user
             event.target.reset()
-            // set empty state after creating user
-            setError('')
             // show toast after creating user
             toast('User has been successfully created')
+            verifyEmail(createdUser)
         })
         .catch(error => {
             console.error(error);
             setError(error.message)
         })
     }
+    const verifyEmail = (user) => {
+        sendEmailVerification(user)
+        .then(()=>{
+            setNotice(`Please check your Email ${user.email} `)
+        })
+        .catch(error => {
+            console.error(error.message);
+        })
+    }
     return (
         <div className='w-50 mx-auto'>
+            <p className='text-info'>{notice}</p>
             <h4>Register</h4>
             <form onSubmit={handleSubmit}>
                 <input className='w-50 rounded ps-3' onChange={handleEmailChange} type="email" name="email" id="email" placeholder='Your Email' required />

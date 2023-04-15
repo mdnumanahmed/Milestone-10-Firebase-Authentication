@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 const auth = getAuth(app)
 const Login = () => {
     const [error, setError] = useState('')
+    const [notice, setNotice] =  useState('')
     
     const googleProvider = new GoogleAuthProvider()
     const githubProvider = new GithubAuthProvider()
@@ -41,6 +42,7 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault()
         setError('')
+        setNotice('')
         const form = event.target 
         const email = form.email.value 
         const password = form.password.value 
@@ -50,6 +52,10 @@ const Login = () => {
         .then(result => {
             const loggedUser = result.user
             console.log(loggedUser);
+            if(!loggedUser.emailVerified){
+                setNotice('Firstly verify your email then login')
+                return
+            }
             toast('User logged in by Email successfully')
         })
         .catch(error => {
@@ -61,6 +67,7 @@ const Login = () => {
     }
     return (
         <div className='w-50 mx-auto'>
+        <p className='text-info'>{notice}</p>
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <input className='w-50 rounded ps-3' type="email" name="email" id="email" placeholder='Your Email' required />
