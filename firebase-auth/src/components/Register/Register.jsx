@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {createUserWithEmailAndPassword, getAuth, sendEmailVerification} from 'firebase/auth'
+import {createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile} from 'firebase/auth'
 import app from '../../firebase/firebase.config';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
@@ -22,7 +22,8 @@ const Register = () => {
         // 2. collect data from the form
         const email = event.target.email.value 
         const password = event.target.password.value 
-        console.log(email, password);
+        const name = event.target.name.value 
+        console.log(email, password, name);
         setError('')
         // validate password
         if(!/(?=.*[A-Z])/.test(password)){
@@ -46,6 +47,7 @@ const Register = () => {
             // show toast after creating user
             toast('User has been successfully created')
             verifyEmail(createdUser)
+            updateUserData(createdUser, name)
         })
         .catch(error => {
             console.error(error);
@@ -61,11 +63,25 @@ const Register = () => {
             console.error(error.message);
         })
     }
+    const updateUserData = (user, name) => {
+        updateProfile(user, {
+            displayName : name
+        })
+        .then(()=>{
+            toast('User Profile updated')
+
+        })
+        .catch(error => {
+            setError(error.message)
+        })
+    }
     return (
         <div className='w-50 mx-auto'>
             <p className='text-info'>{notice}</p>
             <h4>Register</h4>
             <form onSubmit={handleSubmit}>
+                <input className='w-50 rounded ps-3' type="text" name="name" id="name" placeholder='Your name' required />
+                <br /> <br />
                 <input className='w-50 rounded ps-3' onChange={handleEmailChange} type="email" name="email" id="email" placeholder='Your Email' required />
                 <br /> <br />
                 <input className='w-50 rounded ps-3' onBlur={handlePassBlur} type="password" name="password" id="password" placeholder='Your Password' required/>
