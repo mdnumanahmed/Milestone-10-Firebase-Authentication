@@ -6,3 +6,6 @@
     margin: 20px auto;
     box-shadow: 4px 4px 20px lightgray;
 }
+.text-error{
+    color: rgb(207, 36, 36);
+}
