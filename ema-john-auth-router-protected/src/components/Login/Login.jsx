@@ -1,6 +1,7 @@
 import React from "react";
 import "./Login.css";
 import { Link } from "react-router-dom";
+import { FaGoogle } from 'react-icons/fa';
 
 const Login = () => {
   return (
@@ -43,7 +44,7 @@ const Login = () => {
         </p>
           <div className="divider">-------------------- OR -------------------</div>
           <div>
-            <button className="social-login-btn">Continue with Google</button>
+            <button className="social-login-btn"><FaGoogle color="red"/> Continue with Google</button>
           </div>
         </div>
     </div>
