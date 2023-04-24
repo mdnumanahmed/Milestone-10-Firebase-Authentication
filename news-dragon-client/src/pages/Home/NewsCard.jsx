@@ -15,7 +15,7 @@ const NewsCard = ({ news }) => {
           style={{ height: "40px" }}
           src={author.img}
           roundedCircle
-          fluid
+        
         />
         <div className="flex-grow-1 ps-3">
           <h5 className="mb-0">{author?.name}</h5>
@@ -31,7 +31,7 @@ const NewsCard = ({ news }) => {
       </Card.Header>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <Card.Img variant="top" src={image_url} fluid />
+        <Card.Img variant="top" src={image_url} />
         <Card.Text>
           {details.length < 300 ? (
             <>{details}</>
