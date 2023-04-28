@@ -18,18 +18,16 @@ const DragonNavbar = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mx-auto">
-                <Nav.Link href="#features">
-                  <Link to="/">Home</Link>
-                </Nav.Link>
-                <Nav.Link href="#pricing">About</Nav.Link>
-                <Nav.Link href="#career">Career</Nav.Link>
+                  <Link className='nav-link' to="/">Home</Link>
+                  <Link className='nav-link' to="/about">About</Link>
+                  <Link className='nav-link' to="/career">Career</Link>
               </Nav>
               <Nav>
-                <Nav.Link href="#deets">
+                <Link className='nav-link' href="#deets">
                   {user && user.displayName}{" "}
                   {user && <FaUserAlt style={{ fontSize: "2rem" }} />}
-                </Nav.Link>
-                <Nav.Link eventKey={2} href="#memes">
+                </Link>
+                <span className='nav-link' href="#memes">
                   {user ? (
                     <Button variant="secondary">Logout</Button>
                   ) : (
@@ -37,7 +35,7 @@ const DragonNavbar = () => {
                       <Button variant="secondary">Login</Button>
                     </Link>
                   )}
-                </Nav.Link>
+                </span>
               </Nav>
             </Navbar.Collapse>
           </Container>
